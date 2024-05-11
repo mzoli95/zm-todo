@@ -1,0 +1,60 @@
+<mat-sidenav-container autosize>
+  <mat-sidenav
+    #sidenav
+    mode="side"
+    [opened]="true"
+    (mouseover)="isOpen = true"
+    (mouseleave)="isOpen = false"
+    class="w-20 pt-8 pl-4"
+  >
+    <mat-nav-list>
+      @if(isOpen){
+      <div class="pt-12">
+        <button
+          mat-button
+          class="w-full text-left mb-2 hover:bg-gray-600 text-white text-lg p-2"
+        >
+          Tasklist
+        </button>
+        <button
+          mat-button
+          class="w-full text-left mb-2 hover:bg-gray-600 text-white text-lg p-2"
+        >
+          Todo
+        </button>
+        <button
+          mat-button
+          class="w-full text-left hover:bg-gray-600 text-white text-lg p-2"
+        >
+          Profil
+        </button>
+        @if(authService.currentUser$ig()){
+        <button
+          mat-button
+          (click)="logout()"
+          class="w-full text-left hover:bg-gray-600 text-white text-lg p-2"
+        >
+          Logout
+        </button>
+        }
+      </div>
+      }@else {
+      <div class="pt-1 pr-4">
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </div>
+      }
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <nav class="border-l-2 border-white p-3 bg-indigo-800 py-4">
+      <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center">
+          <h1 class="text-white p-3 text-xl font-bold">ZM - TODO</h1>
+        </div>
+      </div>
+    </nav>
+    <router-outlet></router-outlet>
+    <!-- <zm-login></zm-login> -->
+  </mat-sidenav-content>
+</mat-sidenav-container>

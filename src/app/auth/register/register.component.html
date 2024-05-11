@@ -1,0 +1,68 @@
+<div>
+  <div class="content flex justify-center items-center pt-60">
+    <div class="w-full md:max-w-md bg-gray-200 shadow-md rounded-md">
+      <div class="bg-gray-700 text-white py-2 px-4 rounded-t-md">Sign up</div>
+      <div class="p-4">
+        <form [formGroup]="form">
+          <div class="mb-4">
+            <mat-form-field class="w-full">
+              <mat-label>Username</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Type your username..."
+                [formControl]="registerFormControls.username"
+              />
+              <mat-icon matSuffix>account_box</mat-icon>
+            </mat-form-field>
+          </div>
+          <div class="mb-4">
+            <mat-form-field class="w-full">
+              <mat-label>Email address</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Type your email..."
+                [formControl]="registerFormControls.email"
+              />
+              <mat-icon matSuffix>account_box</mat-icon>
+            </mat-form-field>
+          </div>
+          <div class="mb-4">
+            <mat-form-field class="w-full">
+              <mat-label>Password</mat-label>
+              <input
+                matInput
+                [formControl]="registerFormControls.password"
+                placeholder="Type your password..."
+                [type]="hide ? 'password' : 'text'"
+              />
+              <button
+                mat-icon-button
+                matSuffix
+                (click)="hide = !hide"
+                [attr.aria-label]="'Hide password'"
+                [attr.aria-pressed]="hide"
+              >
+                <mat-icon>{{
+                  hide ? "visibility_off" : "visibility"
+                }}</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div class="text-center">
+            <button
+              [disabled]="!this.form.valid"
+              mat-raised-button
+              color="primary"
+              (click)="registerUser()"
+              class="text-white py-2 px-4 rounded-md"
+            >
+              Register
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
