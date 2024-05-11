@@ -12,9 +12,11 @@ Ez egy egyszerű ToDo alkalmazás, amely segít a felhasználóknak nyomon köve
 
 Ez az alkalmazás a következő technológiákat használja:
 
-- Angular: A frontend keretrendszer
+- Angular (17) : A frontend keretrendszer
 - Firebase: Az autentikációhoz és adatbázishoz
-- TypeScript: A nyelv, amelyben az alkalmazás íródott
+- TypeScript
+- Ngrx
+- Rxjs
 
 ## Telepítés és futtatás
 
