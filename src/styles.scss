@@ -1,0 +1,14 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; /* Ez megakadályozza a felesleges görgetést */
+}
+
+.mat-sidenav-container,
+.mat-sidenav {
+  height: 100%;
+}
