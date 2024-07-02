@@ -4,7 +4,7 @@ This Angular application integrates ngrx for state management, Firebase for auth
 
 ## Technologies Used
 - Angular 18
-- ngrx (Effects, Actions, Selectors)
+- ngrx (Effects, Actions, Selectors, Reducer)
 - Firebase Authentication
 - Material Design Components (Angular Material)
 - PrimeNG for Notifications
