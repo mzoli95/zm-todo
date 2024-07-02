@@ -1,0 +1,16 @@
+<div style="display: flex; align-items: center">
+  <!-- <mat-form-field appearance="fill" style="flex: 1">
+    <mat-label>Search</mat-label>
+    <input matInput placeholder="Search" />
+    <button matSuffix mat-icon-button aria-label="Search">
+      <mat-icon>search</mat-icon>
+    </button>
+  </mat-form-field> -->
+
+  <button (click)="createTodo()" mat-icon-button aria-label="Add item">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
+<div class="mat-elevation-z8">
+  <zm-todo-list />
+</div>

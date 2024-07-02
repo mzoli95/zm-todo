@@ -1,0 +1,77 @@
+<div class="todo-additional-container">
+  <form [formGroup]="form" class="grid grid-cols-2 gap-4 p-8">
+    <div class="col-span-1">
+      <mat-form-field class="w-full">
+        <mat-label>Deadline</mat-label>
+        <input matInput formControlName="deadline" [matDatepicker]="picker" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div class="col-span-1">
+      <mat-form-field class="w-full">
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="stage">
+          @for(stage of stagesEnum; track stage){
+          <mat-option [value]="stage">
+            {{ stage | enumMapper }}
+          </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-span-1">
+      <mat-form-field class="w-full">
+        <mat-label>Tags</mat-label>
+        <mat-select formControlName="tags" multiple>
+          @for(tag of tagsEnum; track tag){
+          <mat-option [value]="tag">
+            {{ tag | enumMapper }}
+          </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-span-1">
+      <mat-form-field class="w-full">
+        <mat-label>Owner</mat-label>
+        <input
+          type="text"
+          matInput
+          placeholder="Select an owner..."
+          [formControl]="ownedForm.email"
+          [matAutocomplete]="auto"
+        />
+        <mat-autocomplete
+          #auto="matAutocomplete"
+          (optionSelected)="onUserSelected($event)"
+        >
+          @for(user of users; track user){
+          <mat-option [value]="user">
+            {{ user.displayName }} ({{ user.email }})
+          </mat-option>
+          }
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+
+    <div class="col-span-1">
+      <p-floatLabel>
+        <p-multiSelect
+          [options]="assignedUsers"
+          [formControl]="assignedToForm.email"
+          optionLabel="displayName"
+          display="chip"
+          [appendTo]="'body'"
+          [style]="{ width: '100%',  }"
+          (onFilter)="getUsers($event)"
+        >
+        </p-multiSelect>
+        <label for="float-label">Select users whose assign to</label>
+      </p-floatLabel>
+    </div>
+  </form>
+</div>

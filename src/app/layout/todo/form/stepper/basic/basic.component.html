@@ -1,0 +1,40 @@
+<div class="todo-basic-container">
+  <form [formGroup]="form" class="grid grid-cols-2 gap-4 p-8">
+    <div class="col-span-1">
+      <mat-form-field class="w-full">
+        <mat-label>Title</mat-label>
+        <input
+          matInput
+          [formControl]="todoBasicFormControls.title"
+          type="text"
+          placeholder="Title"
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="col-span-1">
+      <mat-form-field class="w-full">
+        <mat-label>Priority</mat-label>
+        <mat-select formControlName="priority">
+          @for(priority of prioritiesEnum; track priority){
+          <mat-option [value]="priority">
+            {{ priority | enumMapper }}
+          </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-span-2">
+      <mat-form-field class="w-full">
+        <mat-label>Description</mat-label>
+        <textarea
+          matInput
+          [formControl]="todoBasicFormControls.description"
+          placeholder="Description"
+          rows="4"
+        ></textarea>
+      </mat-form-field>
+    </div>
+  </form>
+</div>

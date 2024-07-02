@@ -1,0 +1,43 @@
+<div class="todo-comments-container flex space-x-4">
+  <form [formGroup]="form" class="flex flex-col mt-10 space-y-4 w-1/2">
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Comment</mat-label>
+      <textarea matInput formControlName="text"></textarea>
+    </mat-form-field>
+
+    <button
+      mat-button
+      mat-raised-button
+      class="w-80 mx-auto"
+      color="primary"
+      (click)="onCreateComment()"
+    >
+      Add comment
+    </button>
+  </form>
+
+  <div class="comments-list w-1/2 h-84 overflow-y-auto">
+    <div class="space-y-4">
+      @for( comment of (comments$ | async); track comment){
+      <mat-card class="comment-item p-4 border rounded shadow">
+        <div class="flex items-start justify-between">
+          <div>
+            <p class="font-bold">{{ comment.createdBy }}</p>
+            <p class="text-sm text-gray-600">
+              {{ comment.createdAt | date : "short" }}
+            </p>
+            <p>{{ comment.text }}</p>
+          </div>
+          <div class="flex items-center">
+            <mat-icon
+              class="text-gray-600"
+              (click)="onDeleteComment(comment.todoId, comment.id)"
+              >delete</mat-icon
+            >
+          </div>
+        </div>
+      </mat-card>
+      }
+    </div>
+  </div>
+</div>
