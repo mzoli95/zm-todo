@@ -1,0 +1,75 @@
+<!-- <mat-form-field>
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+  </mat-form-field>
+   -->
+<div class="container mx-auto px-4 py-8">
+  <table mat-table [dataSource]="dataSource$" matSort>
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
+      <td mat-cell *matCellDef="let row">{{ row.title }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+      <td mat-cell *matCellDef="let row">{{ row.description }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="deadline">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Deadline</th>
+      <td mat-cell *matCellDef="let row">{{ row.deadline }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="priority">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Priority</th>
+      <td mat-cell *matCellDef="let row">
+        <div [appPriorityColor]="row.priority" class="w-5 h-6"></div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="stage">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Stage</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.stage | enumMapper }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="createdBy">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Created By</th>
+      <td mat-cell *matCellDef="let row">{{ row.createdBy }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+      <td mat-cell *matCellDef="let element">
+        <span
+          class="material-icons"
+          style="font-size: 33px; color: rgb(59, 185, 24)"
+          (click)="modifyTodo(element.id)"
+          >edit</span
+        >
+
+        <span
+          class="material-icons"
+          style="
+            color: rgb(234, 83, 83);
+            font-size: 33px;
+            -webkit-text-stroke-width: 0px;
+          "
+          (click)="deleteTodo(element.id)"
+        >
+          delete_forever
+        </span>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" class="pt-5 pl-5" colspan="4">No data matching.</td>
+    </tr>
+  </table>
+
+  <!-- <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator> -->
+</div>

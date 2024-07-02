@@ -1,0 +1,38 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+.mat-sidenav-container,
+.mat-sidenav {
+  height: 100%;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.notification-service-success {
+  .mat-mdc-snack-bar-container .mdc-snackbar__surface {
+    border-radius: 8px !important;
+  }
+  .mat-mdc-button.mat-mdc-snack-bar-action {
+    color: white !important;
+  }
+  .mdc-snackbar__surface {
+    background-color: #439946 !important;
+  }
+  .mdc-snackbar__label {
+    color: white !important;
+  }
+}

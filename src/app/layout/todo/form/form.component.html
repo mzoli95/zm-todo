@@ -1,0 +1,41 @@
+<mat-card class="h-full flex flex-col">
+  <mat-card-content class="flex-grow p-4">
+    @if(isCreate()){
+    <zm-stepper-form />
+    }@else{
+    <zm-tab-form />
+    }
+  </mat-card-content>
+
+  <mat-card-actions class="flex justify-between p-4">
+    <div>
+      @if( currentStep > 0) {
+      <button mat-button class="font-bold py-2 px-4" (click)="closeDialog()">
+        Cancel
+      </button>
+      <button mat-button class="font-bold py-2 px-4" (click)="goBack()">
+        Back
+      </button>
+      } @else {
+      <button mat-button class="font-bold py-2 px-4" (click)="closeDialog()">
+        Cancel
+      </button>
+      }
+    </div>
+    <div>
+      @if(currentStep < 2) {
+      <button mat-button class="font-bold py-2 px-4" (click)="goForward()">
+        Next
+      </button>
+      } @else {
+      <button
+        mat-button
+        class="font-bold py-2 px-4"
+        (click)="isCreate() ? postTodo() : updateTodo()"
+      >
+        {{ isCreateText() }}
+      </button>
+      }
+    </div>
+  </mat-card-actions>
+</mat-card>

@@ -1,0 +1,66 @@
+<mat-sidenav-container autosize>
+  <mat-sidenav #sidenav mode="side" [opened]="true" class="w-40 pt-8 pl-4">
+    <mat-nav-list>
+      <div class="pt-12">
+        <button
+          mat-button
+          class="w-40 text-left mb-2 hover:bg-gray-600 text-white text-lg p-2"
+          routerLink="todo"
+        >
+          Tasklist
+        </button>
+        <!-- <button
+          mat-button
+          class="w-full text-left mb-2 hover:bg-gray-600 text-white text-lg p-2"
+        >
+          Todo
+        </button>
+        <button
+          mat-button
+          class="w-full text-left hover:bg-gray-600 text-white text-lg p-2"
+        >
+          Profil
+        </button> -->
+      </div>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <nav
+      class="w-full border-l-2 border-white bg-indigo-800 py-8 flex justify-between items-center px-8"
+    >
+      <h1 class="text-white text-xl font-bold">ZM - TODO</h1>
+      <div
+        class="flex text-white text-lg items-center space-x-4"
+        style="height: 48px"
+      >
+        @defer (when authService.currentUser$ig()) {
+        @if(authService.currentUser$ig()){
+        <span class="text-white"
+          >Hi, {{ authService.currentUser$ig()?.username }}!</span
+        >
+        <button mat-icon-button (click)="logout()">
+          <mat-icon class="text-white pt-1">logout</mat-icon>
+        </button>
+        }@else{
+        <button
+          class="hover:bg-gray-600"
+          mat-icon-button
+          (click)="navigateToLogin()"
+        >
+          Login
+        </button>
+        <button
+          class="hover:bg-gray-600"
+          mat-icon-button
+          (click)="navigateToRegister()"
+        >
+          Register
+        </button>
+        } }
+      </div>
+    </nav>
+    <div class="m-8">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

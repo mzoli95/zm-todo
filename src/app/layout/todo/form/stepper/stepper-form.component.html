@@ -1,0 +1,11 @@
+<mat-stepper class="w-full" [linear]="true" #stepper>
+  <mat-step [stepControl]="basic.form" label="Basic info">
+    <zm-todo-stepper-basic #basic></zm-todo-stepper-basic>
+  </mat-step>
+  <mat-step [stepControl]="additional.form" label="Additional info">
+    <zm-todo-stepper-additional #additional></zm-todo-stepper-additional>
+  </mat-step>
+  <mat-step label="Comments">
+    <zm-todo-stepper-comment></zm-todo-stepper-comment>
+  </mat-step>
+</mat-stepper>
