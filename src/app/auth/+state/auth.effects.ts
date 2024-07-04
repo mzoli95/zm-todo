@@ -176,15 +176,17 @@ export class AuthEffects {
           AuthActions.logoutUserSuccess
         ),
         tap((action) => {
-          if (action.type === AuthActions.redirectToRegister.type) {
-            this.router.navigate(['register']);
-          } else if (
-            action.type === AuthActions.redirectToLogin.type ||
-            action.type === AuthActions.logoutUserSuccess.type
-          ) {
-            this.router.navigate(['login']);
-          } else {
-            this.router.navigate(['/']);
+          switch (action.type) {
+            case AuthActions.redirectToRegister.type:
+              this.router.navigate(['register']);
+              break;
+            case AuthActions.redirectToLogin.type:
+            case AuthActions.logoutUserSuccess.type:
+              this.router.navigate(['login']);
+              break;
+            default:
+              this.router.navigate(['/']);
+              break;
           }
         })
       ),

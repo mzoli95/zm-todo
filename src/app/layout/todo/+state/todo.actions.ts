@@ -86,10 +86,11 @@ export const updateTodoFormSuccess = createAction(
   '[Todo] Update Todo Form Success'
 );
 
-export const deleteTodo = createAction(
-  '[Todo] Delete Todo',
+export const deleteTodoConfirmation = createAction(
+  '[Todo] Delete Todo Confirmation',
   props<{ id: string }>()
 );
+
 export const deleteTodoSuccess = createAction('[Todo] Delete Todo Success');
 export const getUpdateTodo = createAction(
   '[Todo] Get Update Todo',
@@ -114,7 +115,7 @@ export const previousTodoComponent = createAction(
 export const nextTodoComponentSuccess = createAction('[Todo] Step++');
 export const previousTodoComponentSuccess = createAction('[Todo] Step--');
 
-export const deleteComment = createAction(
+export const deleteConfirmationComment = createAction(
   '[Todo] Delete Comment',
   props<{ id: number; commentId: number }>()
 );

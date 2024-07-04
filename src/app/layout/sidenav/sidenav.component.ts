@@ -6,8 +6,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { LoginComponent } from '../../auth/login/login.component';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
-import * as AuthActions from '../../auth/+state/auth.actions';
 import { Store } from '@ngrx/store';
+import * as AuthActions from '../../auth/+state/auth.actions';
 
 @Component({
   selector: 'zm-sidenav',
@@ -29,16 +29,15 @@ export class SidenavComponent {
 
   constructor(private store: Store) {}
 
-  isOpen: boolean = false;
-
-  logout(): void {
-    this.authService.logout();
-  }
-
   navigateToRegister(): void {
     this.store.dispatch(AuthActions.redirectToRegister());
   }
+
   navigateToLogin(): void {
     this.store.dispatch(AuthActions.redirectToLogin());
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 }

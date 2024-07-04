@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
   providedIn: 'root',
 })
 export abstract class SubscriptionManager implements OnDestroy {
+  //TODO do it with destroyref
   private subscriptions = new Subscription();
 
   protected addSubscriptions(...subs: Subscription[]) {

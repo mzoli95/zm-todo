@@ -1,49 +1,36 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import * as TodoActions from './todo.actions';
 import * as TodoSelectors from './todo.selectors';
 import {
   EMPTY,
   catchError,
-  delay,
-  exhaustMap,
   finalize,
   from,
   map,
-  merge,
   mergeMap,
   of,
   switchMap,
-  take,
-  tap,
   withLatestFrom,
 } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
-import { Comments, TodoDTO } from '../../../model/todoDto.interface';
+import { Comments } from '../../../model/todoDto.interface';
 import { TodoService } from '../todo.service';
 import { TodoFormState } from './todo.reducer';
-import { Auth } from 'firebase/auth';
 import { AuthService } from '../../../auth/auth.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { EditComponent } from '../edit/edit.component';
 import { CreateComponent } from '../create/create.component';
 import { NotificationType } from '../../../model/mz.enums';
 import { MessageService } from 'primeng/api';
 import { StepperService } from '../../../utils/stepper.service';
+import { ConfirmDialogComponent } from '../../../shared/dialog/confirmation/confirm-dialog.component';
 
 @Injectable()
 export class TodoEffects {
   actions$ = inject(Actions);
-
-  constructor(
-    private authService: AuthService,
-    private service: TodoService,
-    private dialog: MatDialog,
-    private store: Store,
-    private messageService: MessageService,
-    private stepperService: StepperService
-  ) {}
+  confirmDialogRef = signal<MatDialogRef<ConfirmDialogComponent> | null>(null);
 
   updateForm$ = createEffect(() =>
     this.actions$.pipe(
@@ -192,39 +179,44 @@ export class TodoEffects {
     )
   );
 
-  deleteTodo$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(TodoActions.deleteTodo),
-        mergeMap((data) =>
-          this.service.deleteTodo(data?.id).pipe(
-            map(() => {
-              return TodoActions.deleteTodoSuccess();
-            }),
-            catchError((error) => {
-              return of(TodoActions.todoError({ error: error }));
-            })
-          )
-        )
-      ),
-    { dispatch: false }
-  );
-
-  deleteComment$ = createEffect(() =>
+  deleteConfirmation$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(TodoActions.deleteComment),
-      mergeMap((data) =>
-        this.service.deleteComment(data.id, data.commentId).pipe(
-          map(() => {
-            return TodoActions.deleteCommentSuccess({
-              commentId: data.commentId,
-            });
+      ofType(
+        TodoActions.deleteTodoConfirmation,
+        TodoActions.deleteConfirmationComment
+      ),
+      switchMap((data) => {
+        const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+          disableClose: true,
+        });
+        this.confirmDialogRef.set(dialogRef);
+
+        return dialogRef.afterClosed().pipe(
+          switchMap(() => {
+            switch (data.type) {
+              case TodoActions.deleteTodoConfirmation.type:
+                return this.service.deleteTodo(data?.id).pipe(
+                  map(() => TodoActions.deleteTodoSuccess()),
+                  catchError((error) => of(TodoActions.todoError({ error })))
+                );
+              case TodoActions.deleteConfirmationComment.type:
+                return this.service.deleteComment(data.id, data.commentId).pipe(
+                  map(() =>
+                    TodoActions.deleteCommentSuccess({
+                      commentId: data.commentId,
+                    })
+                  ),
+                  catchError((error) => of(TodoActions.todoError({ error })))
+                );
+              default:
+                return EMPTY;
+            }
           }),
-          catchError((error) => {
-            return of(TodoActions.todoError({ error: error }));
+          finalize(() => {
+            this.confirmDialogRef.set(null);
           })
-        )
-      )
+        );
+      })
     )
   );
 
@@ -270,4 +262,13 @@ export class TodoEffects {
       })
     )
   );
+
+  constructor(
+    private authService: AuthService,
+    private service: TodoService,
+    private dialog: MatDialog,
+    private store: Store,
+    private messageService: MessageService,
+    private stepperService: StepperService
+  ) {}
 }

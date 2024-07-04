@@ -1,11 +1,6 @@
-import {
-  APP_INITIALIZER,
-  ApplicationConfig,
-  importProvidersFrom,
-} from '@angular/core';
+import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
-import { routes } from './app.routes';
 import { provideState, provideStore } from '@ngrx/store';
 
 import { provideStoreDevtools } from '@ngrx/store-devtools';
@@ -17,10 +12,8 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import {
   HTTP_INTERCEPTORS,
   provideHttpClient,
-  withInterceptors,
   withInterceptorsFromDi,
 } from '@angular/common/http';
-import { firebaseConfig } from '../../configs';
 import {
   AUTH_FORM_FEATURE_KEY,
   authFormReducer,
@@ -35,10 +28,12 @@ import {
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { FIREBASE_CONFIG } from '../../configs';
+import { APP_ROUTES } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes),
+    provideRouter(APP_ROUTES),
     provideAnimations(),
     provideStore(),
     provideState({ name: AUTH_FORM_FEATURE_KEY, reducer: authFormReducer }),
@@ -51,7 +46,7 @@ export const appConfig: ApplicationConfig = {
       useClass: AuthInterceptor,
       multi: true,
     },
-    provideFirebaseApp(() => initializeApp(firebaseConfig)),
+    provideFirebaseApp(() => initializeApp(FIREBASE_CONFIG)),
     provideFirestore(() => getFirestore()),
     provideAuth(() => getAuth()),
     MessageService,

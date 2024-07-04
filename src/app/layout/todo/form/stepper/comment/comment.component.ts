@@ -59,7 +59,7 @@ export class CommentComponent extends SubscriptionManager implements OnInit {
 
   ngOnInit(): void {}
 
-  onCreateComment() {
+  onCreateComment(): void {
     this.store.dispatch(
       TodoActions.todoCommentPost({
         value: this.commentControl['text'].value ?? '',
@@ -68,7 +68,9 @@ export class CommentComponent extends SubscriptionManager implements OnInit {
     this.form.reset();
   }
 
-  onDeleteComment(id: number, commentId: number) {
-    this.store.dispatch(TodoActions.deleteComment({ id, commentId }));
+  onDeleteComment(id: number, commentId: number): void {
+    this.store.dispatch(
+      TodoActions.deleteConfirmationComment({ id, commentId })
+    );
   }
 }

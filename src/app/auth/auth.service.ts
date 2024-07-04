@@ -17,6 +17,7 @@ import * as AuthActions from './+state/auth.actions';
 import { Store } from '@ngrx/store';
 import { EmailAddress } from '../model/todoDto.interface';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environment/environment.dev';
 
 @Injectable({
   providedIn: 'root',
@@ -31,6 +32,8 @@ export class AuthService {
   user$ = user(this.firebaseAuth);
   currentUser$ig = signal<UserInterface | null | undefined>(undefined);
 
+  url = environment.apiUrl;
+
   register(userData: RegisterFormState): Observable<void> {
     const promise = createUserWithEmailAndPassword(
       this.firebaseAuth,
@@ -43,7 +46,7 @@ export class AuthService {
   }
 
   postEmail(data: EmailAddress) {
-    return this.http.post('http://localhost:5168/api/todo/email', data).pipe(
+    return this.http.post(`${this.url}/todo/email`, data).pipe(
       catchError((error) => {
         return throwError(
           () => new Error(error.message || 'Valami hiba történt')

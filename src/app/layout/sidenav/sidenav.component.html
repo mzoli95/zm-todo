@@ -33,7 +33,8 @@
         class="flex text-white text-lg items-center space-x-4"
         style="height: 48px"
       >
-        @defer (when authService.currentUser$ig()) {
+        <!-- TODO fix defer -->
+        <!-- @defer (when authService.currentUser$ig()) { -->
         @if(authService.currentUser$ig()){
         <span class="text-white"
           >Hi, {{ authService.currentUser$ig()?.username }}!</span
@@ -56,7 +57,8 @@
         >
           Register
         </button>
-        } }
+        }
+        <!-- } -->
       </div>
     </nav>
     <div class="m-8">

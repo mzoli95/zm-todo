@@ -1,24 +1,23 @@
 import { Routes } from '@angular/router';
-import { TodoComponent } from './layout/todo/todo.component';
-import { RegisterComponent } from './auth/register/register.component';
-import { LoginComponent } from './auth/login/login.component';
-import { AuthGuard, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 
-const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
-export const routes: Routes = [
+export const APP_ROUTES: Routes = [
   { path: '', redirectTo: 'todo', pathMatch: 'full' },
   {
-    path: 'todo',
-    component: TodoComponent,
-    canActivate: [AuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin },
-  },
-  {
     path: 'register',
-    component: RegisterComponent,
+    loadComponent: () =>
+      import('./auth/register/register.component').then(
+        (mod) => mod.RegisterComponent
+      ),
   },
   {
     path: 'login',
-    component: LoginComponent,
+    loadComponent: () =>
+      import('./auth/login/login.component').then((mod) => mod.LoginComponent),
   },
+  {
+    path: 'todo',
+    loadChildren: () =>
+      import('./layout/todo/todo.routes').then((mod) => mod.TODO_ROUTES),
+  },
+  { path: '**', redirectTo: 'todo' },
 ];
