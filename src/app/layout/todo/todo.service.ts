@@ -28,6 +28,7 @@ export class TodoService {
   }
 
   updateTodo(data: TodoItems) {
+    console.log(data);
     return this.http
       .put(`http://localhost:5168/api/todo/updatetodo/${data.id}`, data)
       .pipe(

@@ -56,7 +56,7 @@ export class RegisterComponent extends SubscriptionManager {
     this.store.dispatch(AuthActions.postRegister());
   }
 
-  redirectToLogin() {
+  navigateToLogin() {
     this.store.dispatch(AuthActions.redirectToLogin());
   }
 }

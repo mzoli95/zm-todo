@@ -9,12 +9,14 @@ export enum Priority {
   Low = 'Low',
   Medium = 'Medium',
   High = 'High',
+  Critical = 'Critical',
 }
 
 export enum Stage {
   Todo = 'Todo',
   InProgress = 'InProgress',
   Done = 'Done',
+  Test = 'Test',
 }
 
 export enum Tag {

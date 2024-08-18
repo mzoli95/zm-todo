@@ -14,6 +14,7 @@ import * as AuthActions from '../+state/auth.actions';
 import { SubscriptionManager } from '../../utils/subscriptionManager';
 import { HttpClient } from '@angular/common/http';
 import { LoginFormState } from '../../model/user.interface';
+import { zmEmailValidator } from '../../shared/validator/email.validator';
 type LoginForm = Record<keyof LoginFormState, FormControl>;
 
 @Component({
@@ -36,7 +37,7 @@ export class LoginComponent extends SubscriptionManager {
   http = inject(HttpClient);
 
   loginFormControls: LoginForm = {
-    email: new FormControl(null, Validators.required),
+    email: new FormControl(null, [Validators.required, zmEmailValidator]),
     password: new FormControl(null, Validators.required),
   };
   form = new FormGroup(this.loginFormControls);
@@ -54,7 +55,7 @@ export class LoginComponent extends SubscriptionManager {
     this.store.dispatch(AuthActions.postLogin());
   }
 
-  redirectToRegister() {
+  navigateToRegister() {
     this.store.dispatch(AuthActions.redirectToRegister());
   }
 }

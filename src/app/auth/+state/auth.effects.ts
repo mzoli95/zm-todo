@@ -4,6 +4,7 @@ import {
   EMPTY,
   Observable,
   catchError,
+  finalize,
   from,
   map,
   mapTo,
@@ -24,6 +25,7 @@ import { Auth } from '@angular/fire/auth';
 import { NotificationType } from '../../model/mz.enums';
 import { MessageService } from 'primeng/api';
 import { EmailAddress, EmailAddressDTO } from '../../model/todoDto.interface';
+import { LoadingService } from '../../utils/loading.service';
 
 @Injectable()
 export class AuthEffects {
@@ -34,14 +36,15 @@ export class AuthEffects {
     private service: AuthService,
     private router: Router,
     private firebaseAuth: Auth,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private loadingService: LoadingService
   ) {}
-  // private loadingService: LoadingService
 
   postRegisterUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.postRegister),
-      // tap(() => this.loadingService.loadingOn()),
+      tap(() => this.loadingService.loadingOn()),
+
       withLatestFrom(this.store.select(AuthSelectors.selectRegisterFormState)),
       mergeMap(([_, data]) =>
         this.service.register(data).pipe(
@@ -68,6 +71,7 @@ export class AuthEffects {
   postEmail$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.postEmail),
+
       mergeMap((data: EmailAddressDTO) =>
         this.service
           .postEmail({
@@ -90,6 +94,8 @@ export class AuthEffects {
   postLoginUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.postLogin),
+      tap(() => this.loadingService.loadingOn()),
+
       withLatestFrom(this.store.select(AuthSelectors.selectLoginState)),
       mergeMap(([_, data]) =>
         this.service.login(data).pipe(
@@ -117,6 +123,7 @@ export class AuthEffects {
           this.service.user$.pipe(
             take(1),
             map((user: any) => {
+              setTimeout(() => {}, 3000);
               if (user) {
                 this.service.currentUser$ig.set({
                   email: user.email!,
@@ -126,7 +133,8 @@ export class AuthEffects {
               } else {
                 this.service.currentUser$ig.set(null);
               }
-            })
+            }),
+            finalize(() => this.loadingService.loadingOff())
           )
         )
       ),
@@ -136,10 +144,11 @@ export class AuthEffects {
   logoutUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.logoutUser),
+      tap(() => this.loadingService.loadingOn()),
       switchMap(() => {
         const signOutPromise = signOut(this.firebaseAuth);
         return from(signOutPromise).pipe(
-          switchMap(() => {
+          mergeMap(() => {
             this.messageService.add({
               severity: NotificationType.Success,
               summary: 'Success',
@@ -155,15 +164,20 @@ export class AuthEffects {
     )
   );
 
-  // loadingOff$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType(AuthActions.logoutUserSuccess, AuthActions.loginUserSuccess, AuthActions.registerUserSuccess),
-  //     mergeMap(() => {
-  //       this.loadingService.loadingOff();
-  //       return of(AuthActions.loadingOff());
-  //     })
-  //   )
-  // );
+  loadingOff$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        AuthActions.authError,
+        AuthActions.logoutUserSuccess,
+        AuthActions.postLoginSuccess,
+        AuthActions.postEmailSuccess
+      ),
+      mergeMap(() => {
+        this.loadingService.loadingOff();
+        return of(AuthActions.loadingOff());
+      })
+    )
+  );
 
   redirectTo$ = createEffect(
     () =>

@@ -10,6 +10,7 @@ import {
   mergeMap,
   of,
   switchMap,
+  tap,
   withLatestFrom,
 } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -26,6 +27,7 @@ import { NotificationType } from '../../../model/mz.enums';
 import { MessageService } from 'primeng/api';
 import { StepperService } from '../../../utils/stepper.service';
 import { ConfirmDialogComponent } from '../../../shared/dialog/confirmation/confirm-dialog.component';
+import { LoadingService } from '../../../utils/loading.service';
 
 @Injectable()
 export class TodoEffects {
@@ -35,6 +37,7 @@ export class TodoEffects {
   updateForm$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TodoActions.updateTodoForm),
+      tap(() => this.loadingService.loadingOn()),
       withLatestFrom(this.store.select(TodoSelectors.selectPostTodoForm)),
       mergeMap(([_, data]) => {
         return this.service.updateTodo(data).pipe(
@@ -52,6 +55,7 @@ export class TodoEffects {
   submitForm$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TodoActions.postTodoForm),
+      tap(() => this.loadingService.loadingOn()),
       withLatestFrom(this.store.select(TodoSelectors.selectPostTodoForm)),
       mergeMap(([_, data]) => {
         const currentUser = this.authService.currentUser$ig();
@@ -120,6 +124,7 @@ export class TodoEffects {
   getTodoList$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TodoActions.getTodoList),
+      tap(() => this.loadingService.loadingOn()),
       mergeMap((data) =>
         from(this.authService.getToken()).pipe(
           mergeMap((token) =>
@@ -133,9 +138,6 @@ export class TodoEffects {
               .pipe(
                 map((data: TodoFormState) => {
                   return TodoActions.loadTodoList({ data, token: token ?? '' });
-                }),
-                finalize(() => {
-                  // this.loadingService.loadingOff();
                 }),
 
                 catchError((error) => {
@@ -192,25 +194,32 @@ export class TodoEffects {
         this.confirmDialogRef.set(dialogRef);
 
         return dialogRef.afterClosed().pipe(
-          switchMap(() => {
-            switch (data.type) {
-              case TodoActions.deleteTodoConfirmation.type:
-                return this.service.deleteTodo(data?.id).pipe(
-                  map(() => TodoActions.deleteTodoSuccess()),
-                  catchError((error) => of(TodoActions.todoError({ error })))
-                );
-              case TodoActions.deleteConfirmationComment.type:
-                return this.service.deleteComment(data.id, data.commentId).pipe(
-                  map(() =>
-                    TodoActions.deleteCommentSuccess({
-                      commentId: data.commentId,
-                    })
-                  ),
-                  catchError((error) => of(TodoActions.todoError({ error })))
-                );
-              default:
-                return EMPTY;
+          switchMap((value) => {
+            if (value) {
+              switch (data.type) {
+                case TodoActions.deleteTodoConfirmation.type:
+                  return this.service.deleteTodo(data?.id).pipe(
+                    map(() => TodoActions.deleteTodoSuccess()),
+                    catchError((error) => of(TodoActions.todoError({ error })))
+                  );
+                case TodoActions.deleteConfirmationComment.type:
+                  return this.service
+                    .deleteComment(data.id, data.commentId)
+                    .pipe(
+                      map(() =>
+                        TodoActions.deleteCommentSuccess({
+                          commentId: data.commentId,
+                        })
+                      ),
+                      catchError((error) =>
+                        of(TodoActions.todoError({ error }))
+                      )
+                    );
+                default:
+                  return EMPTY;
+              }
             }
+            return EMPTY;
           }),
           finalize(() => {
             this.confirmDialogRef.set(null);
@@ -249,6 +258,23 @@ export class TodoEffects {
     )
   );
 
+  loadingOff$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        TodoActions.todoError,
+        TodoActions.updateTodoFormSuccess,
+        TodoActions.postTodoFormSuccess,
+        TodoActions.loadTodoList,
+        TodoActions.deleteTodoSuccess,
+        TodoActions.deleteCommentSuccess
+      ),
+      mergeMap(() => {
+        this.loadingService.loadingOff();
+        return of(TodoActions.loadingOff());
+      })
+    )
+  );
+
   errorHandling$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TodoActions.todoError),
@@ -269,6 +295,7 @@ export class TodoEffects {
     private dialog: MatDialog,
     private store: Store,
     private messageService: MessageService,
-    private stepperService: StepperService
+    private stepperService: StepperService,
+    private loadingService: LoadingService
   ) {}
 }

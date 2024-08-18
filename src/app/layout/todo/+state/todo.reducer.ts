@@ -91,9 +91,7 @@ export const todoListReducer = createReducer(
         owned: {
           ...value,
         },
-        assignedTo: {
-          ...state.currentTodo.assignedTo,
-        },
+        assignedTo: [...state.currentTodo.assignedTo],
       },
     };
   }),
@@ -128,9 +126,7 @@ export const todoListReducer = createReducer(
               name: enumValue,
             }))
           : [],
-        assignedTo: {
-          ...state.currentTodo.assignedTo,
-        },
+        assignedTo: [...state.currentTodo.assignedTo],
       },
     };
   }),

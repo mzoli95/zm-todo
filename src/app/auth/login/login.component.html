@@ -14,6 +14,11 @@
                 [formControl]="loginFormControls.email"
               />
               <mat-icon matSuffix>email_box</mat-icon>
+              @if (loginFormControls.email.hasError('required')) {
+              <mat-error>Email is <strong>required</strong>!</mat-error>
+              } @else if (loginFormControls.email.hasError('invalidEmail')) {
+              <mat-error>Invalid email <strong>format</strong>!</mat-error>
+              }
             </mat-form-field>
           </div>
           <div>
@@ -36,6 +41,20 @@
                   hide ? "visibility_off" : "visibility"
                 }}</mat-icon>
               </button>
+
+              @if (loginFormControls.password.hasError('required')) {
+              <mat-error>Password is <strong>required</strong>!</mat-error>
+              } @else if (loginFormControls.password.hasError('minlength')) {
+              <mat-error
+                >Minimum 8 characters <strong>required</strong>!</mat-error
+              >
+              } @else if
+              (loginFormControls.password.hasError('specialCharRequired')) {
+              <mat-error
+                >At least 1 special character
+                <strong>required</strong>!</mat-error
+              >
+              }
             </mat-form-field>
           </div>
           <div class="text-center">
@@ -51,7 +70,7 @@
             <p class="mt-4 text-sm text-gray-600">
               Don't you have an account yet? Register
               <a
-                (click)="redirectToRegister()"
+                (click)="navigateToRegister()"
                 class="text-blue-500 hover:underline cursor-pointer"
               >
                 here

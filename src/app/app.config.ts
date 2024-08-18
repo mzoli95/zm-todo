@@ -1,8 +1,6 @@
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
 import { provideState, provideStore } from '@ngrx/store';
-
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideEffects } from '@ngrx/effects';
 import { provideAnimations } from '@angular/platform-browser/animations';
@@ -30,6 +28,7 @@ import { AuthInterceptor } from './auth/auth.interceptor';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { FIREBASE_CONFIG } from '../../configs';
 import { APP_ROUTES } from './app.routes';
+import { LoadingService } from './utils/loading.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -50,6 +49,7 @@ export const appConfig: ApplicationConfig = {
     provideFirestore(() => getFirestore()),
     provideAuth(() => getAuth()),
     MessageService,
+    LoadingService,
     provideNativeDateAdapter(),
   ],
 };

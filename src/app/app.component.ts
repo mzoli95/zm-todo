@@ -1,14 +1,21 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SidenavComponent } from './layout/sidenav/sidenav.component';
-
-import { ToastModule } from 'primeng/toast';
 import { Store } from '@ngrx/store';
+import { LoadingComponent } from './shared/animation/loading/loading.component';
+import { NotificationComponent } from './shared/notification/notification.component';
 import * as AuthActions from '../app/auth/+state/auth.actions';
+
 @Component({
   selector: 'zm-root',
   standalone: true,
-  imports: [RouterOutlet, SidenavComponent, RouterOutlet, ToastModule],
+  imports: [
+    RouterOutlet,
+    SidenavComponent,
+    RouterOutlet,
+    NotificationComponent,
+    LoadingComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

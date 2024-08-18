@@ -32,6 +32,9 @@ export class PriorityColorDirective implements OnChanges {
       case 'High':
         colorClass = 'bg-high';
         break;
+      case 'Critical':
+        colorClass = 'bg-critical';
+        break;
       default:
         colorClass = 'bg-gray-500';
         break;
